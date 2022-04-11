@@ -7,15 +7,19 @@ public class GameManager : MonoBehaviour
 {
     [Header("Game:")]
     public Player player;
+    public GameObject enemyspawner;
     [Header("UI:")]
     public Text ammoText;
     public Text healthText;
-
+    public Text enemyText;
+    public Text winText;
+    public Text loseText;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        winText.gameObject.SetActive(false);
+        loseText.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -23,5 +27,28 @@ public class GameManager : MonoBehaviour
     {
         ammoText.text = "Ammo: " + player.Ammo;
         healthText.text = "Health: " + player.Health;
+        
+        int killedenemies = 0;
+        foreach (Enemy enemy in enemyspawner.GetComponentsInChildren<Enemy>())
+        {
+            if(enemy.Killed == false)
+            {
+                killedenemies++;
+            }
+        }
+        enemyText.text = "Enemies: " + killedenemies;
+
+        // Win Condition
+        if(killedenemies == 0)
+        {
+            winText.gameObject.SetActive(true);
+        }
+
+        // Lose Condition
+        if (player.Killed == true)
+        {
+            loseText.gameObject.SetActive(true);
+            loseText.text = "You Lose!";
+        }
     }
 }
